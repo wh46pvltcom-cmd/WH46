@@ -1,1 +1,529 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Withdraw</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+padding-bottom:80px;
+}
+
+.header{
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
+margin-bottom:20px;
+}
+
+.support-btn{
+position:absolute;
+right:0;
+top:50%;
+transform:translateY(-50%);
+display:flex;
+flex-direction:column;
+align-items:center;
+text-decoration:none;
+}
+
+.support-icon{
+width:32px;
+height:32px;
+border-radius:50%;
+background:#2563eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:16px;
+}
+
+.support-text{
+font-size:10px;
+color:white;
+margin-top:2px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+h2{
+text-align:center;
+}
+
+.balance{
+text-align:center;
+font-size:28px;
+color:#22c55e;
+font-weight:bold;
+}
+
+.amount-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.amount-btn{
+background:#111827;
+border:none;
+color:white;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.amount-btn:hover{
+background:#2563eb;
+}
+
+.input-box{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+}
+
+.submit-btn{
+width:100%;
+padding:14px;
+background:#2563eb;
+border:none;
+color:white;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+.history-item{
+background:#111827;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+<h2>💸 Withdraw</h2>
+
+<a href="https://t.me/wh46ml" target="_blank" class="support-btn">
+<div class="support-icon">💬</div>
+<div class="support-text">Support</div>
+</a>
+
+</div>
+
+<div class="card">
+<p>Current Balance</p>
+<div class="balance" id="currentBalance">₹0</div>
+</div>
+
+<div class="card">
+<h3>Select Amount</h3>
+
+<div class="amount-grid">
+<button class="amount-btn">₹220</button>
+<button class="amount-btn">₹330</button>
+<button class="amount-btn">₹540</button>
+<button class="amount-btn">₹1080</button>
+<button class="amount-btn">₹2160</button>
+<button class="amount-btn">₹5400</button>
+</div>
+
+<input
+type="hidden"
+id="selectedAmount"
+value="0">
+
+</div>
+
+<div class="card">
+<h3>Payment Method</h3>
+
+<select class="input-box" id="paymentMethod">
+<option value="UPI">UPI ID</option>
+<option value="BANK">Bank Account</option>
+</select>
+
+<!-- পরিবর্তন ১: readonly করা হয়েছে -->
+<input
+type="text"
+id="paymentValue"
+class="input-box"
+readonly>
+
+</div>
+
+<div class="card">
+<h3>Withdrawal Details</h3>
+<p>Minimum Withdrawal: ₹220</p>
+<p>Fee: 10%</p>
+</div>
+
+<button
+class="submit-btn"
+id="withdrawBtn">
+Submit Withdrawal Request
+</button>
+
+<div class="card">
+<h3>Withdrawal History</h3>
+
+<div id="withdrawHistory">
+<div class="history-item">
+No withdrawal yet.
+</div>
+</div>
+
+</div>
+
+<!-- Amount selection logic script -->
+<script>
+let selectedAmount = 0;
+
+document.querySelectorAll(".amount-btn")
+.forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document.querySelectorAll(".amount-btn")
+.forEach(b=>b.style.background="#111827");
+
+btn.style.background="#2563eb";
+
+selectedAmount =
+parseInt(
+btn.innerText.replace("₹","")
+);
+
+document.getElementById("selectedAmount").value =
+selectedAmount;
+
+});
+
+});
+</script>
+
+<!-- Firebase integration script -->
+<script type="module">
+import { auth, db } from "./firebase.js";
+
+// পরিবর্তন ১: updateDoc যুক্ত করা হয়েছে
+import {
+doc,
+getDoc,
+collection,
+addDoc,
+query,
+where,
+getDocs,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// আপনার অনুরোধ অনুযায়ী নিচে এই ইম্পোর্টটি যোগ করা হলো
+import {
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+let currentUser = null;
+let currentBalance = 0;
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user) return;
+
+currentUser = user;
+
+const userRef =
+doc(db,"users",user.uid);
+
+const userSnap =
+await getDoc(userRef);
+
+if(userSnap.exists()){
+
+const data =
+userSnap.data();
+
+currentBalance =
+data.balance || 0;
+
+document.getElementById("currentBalance")
+.textContent =
+"₹" + currentBalance;
+
+}
+
+// UPI Accounts snapshot fetch
+const upiRef =
+doc(db,"upiAccounts",user.uid);
+
+const upiSnap =
+await getDoc(upiRef);
+
+// Bank Accounts snapshot fetch
+const bankRef =
+doc(db,"bankAccounts",user.uid);
+
+const bankSnap =
+await getDoc(bankRef);
+
+// UPI setup logic
+if(upiSnap.exists()){
+
+const data =
+upiSnap.data();
+
+document.getElementById("paymentMethod").innerHTML =
+`<option value="UPI">${data.walletAddress}</option>`;
+
+document.getElementById("paymentValue").value =
+data.walletAddress;
+
+}
+
+// Bank setup logic (পরিবর্তন ২: নতুন লজিক যুক্ত করা হয়েছে)
+if(bankSnap.exists()){
+
+const data =
+bankSnap.data();
+
+document.getElementById("paymentMethod").innerHTML +=
+`<option value="BANK">${data.accountNumber}</option>`;
+
+if(!upiSnap.exists()){
+
+document.getElementById("paymentMethod").value =
+"BANK";
+
+document.getElementById("paymentValue").value =
+data.accountNumber;
+
+}
+
+}
+
+// Dropdown change listener
+document.getElementById("paymentMethod")
+.addEventListener("change",async()=>{
+
+const method =
+document.getElementById("paymentMethod").value;
+
+if(method==="UPI"){
+
+const upiSnap =
+await getDoc(
+doc(db,"upiAccounts",user.uid)
+);
+
+if(upiSnap.exists()){
+
+document.getElementById("paymentValue").value =
+upiSnap.data().walletAddress;
+
+}
+
+}
+
+if(method==="BANK"){
+
+const bankSnap =
+await getDoc(
+doc(db,"bankAccounts",user.uid)
+);
+
+if(bankSnap.exists()){
+
+document.getElementById("paymentValue").value =
+bankSnap.data().accountNumber;
+
+}
+
+}
+
+});
+
+// History retrieval logic
+const historyRef =
+query(
+collection(db,"withdrawRequests"),
+where("userId","==",user.uid)
+);
+
+const historySnap =
+await getDocs(historyRef);
+
+const historyBox =
+document.getElementById("withdrawHistory");
+
+historyBox.innerHTML = "";
+
+historySnap.forEach((withdrawDoc)=>{
+
+const data =
+withdrawDoc.data();
+
+historyBox.innerHTML += `
+
+<div class="history-item">
+
+₹${data.amount}
+
+<br>
+
+Status :
+${data.status}
+
+</div>
+
+`;
+
+});
+
+// History Empty check
+if(historySnap.empty){
+
+historyBox.innerHTML = `
+<div class="history-item">
+No withdrawal yet.
+</div>
+`;
+
+}
+
+});
+
+document.getElementById("withdrawBtn")
+.addEventListener("click", async()=>{
+
+const amount =
+parseInt(
+document.getElementById("selectedAmount").value
+);
+
+const paymentType =
+document.getElementById("paymentMethod").value;
+
+const paymentValue =
+document.getElementById("paymentValue").value;
+
+if(amount===0){
+
+alert("Select Amount");
+return;
+
+}
+
+if(!paymentValue){
+
+alert("Enter Payment Details");
+return;
+
+}
+
+if(currentBalance < amount){
+
+alert("Insufficient Balance");
+return;
+
+}
+
+try {
+await addDoc(
+collection(db,"withdrawRequests"),
+{
+
+userId:
+currentUser.uid,
+
+gmail:
+currentUser.email,
+
+amount,
+
+paymentType,
+
+paymentValue,
+
+status:"PENDING",
+
+requestDate:
+new Date().toISOString()
+
+}
+
+);
+
+// পরিবর্তন ২: Firestore-এ ব্যালেন্স আপডেট করা এবং ইন্টারফেসে দেখানোর লজিক
+await updateDoc(
+doc(db,"users",currentUser.uid),
+{
+balance:
+currentBalance - amount
+}
+);
+
+currentBalance =
+currentBalance - amount;
+
+document.getElementById("currentBalance")
+.textContent =
+"₹" + currentBalance;
+
+// পরিবর্তন ৩: হিস্ট্রি আপডেট করার আগে খালি করার লজিক যুক্ত করা হয়েছে
+if(
+document.getElementById("withdrawHistory")
+.innerText.includes("No withdrawal yet.")
+){
+document.getElementById("withdrawHistory").innerHTML="";
+}
+
+document.getElementById("withdrawHistory")
+.innerHTML += `
+
+<div class="history-item">
+
+₹${amount}
+
+<br>
+
+Status : PENDING
+
+</div>
+
+`;
+
+alert("Withdrawal Request Submitted");
+} catch (error) {
+console.error("Error submitting request:", error);
+alert("Failed to submit request. Please try again.");
+}
+
+});
+</script>
+
+</body>
+</html>
