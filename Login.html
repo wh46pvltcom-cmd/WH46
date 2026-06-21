@@ -1,1 +1,170 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WH46 Login</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+width:100%;
+max-width:420px;
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 25px rgba(37,99,235,.3);
+}
+
+.logo{
+text-align:center;
+font-size:32px;
+font-weight:bold;
+color:#60a5fa;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#cbd5e1;
+margin-bottom:25px;
+}
+
+.input-box{
+margin-bottom:15px;
+}
+
+.input-box input{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:10px;
+background:#334155;
+color:white;
+font-size:16px;
+}
+
+.input-box input::placeholder{
+color:#cbd5e1;
+}
+
+.btn{
+width:100%;
+padding:14px;
+background:#2563eb;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn:hover{
+background:#1d4ed8;
+}
+
+.register-link{
+text-align:center;
+margin-top:20px;
+}
+
+.register-link a{
+color:#60a5fa;
+text-decoration:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="logo">WH46</div>
+
+<div class="subtitle">
+Login to your account
+</div>
+
+<form id="loginForm">
+
+<div class="input-box">
+<input id="email" type="email" placeholder="Email Address" required>
+</div>
+
+<div class="input-box">
+<input id="password" type="password" placeholder="Password" required>
+</div>
+
+<button type="submit" class="btn">
+Login
+</button>
+
+</form>
+
+<div class="register-link">
+Don't have an account?
+<a href="register.html">Register</a>
+</div>
+
+</div>
+
+<script type="module">
+
+import { auth } from "./firebase.js";
+
+import {
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const loginForm = document.getElementById("loginForm");
+
+loginForm.addEventListener("submit", async (e) => {
+
+e.preventDefault();
+
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+try {
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert("Login Successful!");
+
+window.location.href = "dashboard.html";
+
+} catch (error) {
+
+alert(error.message);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
+
