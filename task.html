@@ -1,280 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WH46 Task</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>User Task - WH46</title>  
-    <style>  
-        body { 
-            font-family: sans-serif; 
-            background: #051238; 
-            display: flex; 
-            justify-content: center; 
-            padding: 10px; 
-        }  
+    body {
+        background: #051238;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
 
-        .card { 
-            background: #1d2b4a; 
-            color: white; 
-            padding: 20px 10px; 
-            border-radius: 12px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-            width: 98%; 
-            max-width: 500px; 
-            text-align: center; 
-        }  
+    .container {
+        width: 100%;
+        max-width: 500px;
+    }
 
-        #timer { font-size: 32px; color: #ff4757; font-weight: bold; margin: 15px 0; border: 2px solid #ff4757; display: inline-block; padding: 5px 15px; border-radius: 8px; }  
-        
-        .code-boxes { 
-            display: flex; 
-            justify-content: center; 
-            margin: 25px 0; 
-            width: 100%;
-        }  
-        
-        #mainCodeBox {
-            width: 100%; 
-            height: 95px; 
-            text-align: center;
-            font-size: 30px;     
-            font-weight: bold;
-            font-family: 'Arial', sans-serif;
-            color: #fff; 
-            border: 2px solid #34ace0; 
-            border-radius: 10px;
-            background: #24375c;
-            outline: none;
-            letter-spacing: 6px; 
-            box-sizing: border-box;
-            padding: 0 5px;
-        }
+    .rgb-box {
+        position: relative;
+        padding: 3px;
+        border-radius: 18px;
+        background: linear-gradient(90deg, red, blue, lime, red);
+        background-size: 300% 300%;
+        animation: rgbMove 3s linear infinite;
+        margin-bottom: 25px;
+    }
 
-        #mainCodeBox::placeholder {
-            font-size: 20px;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .btn { background: #1e90ff; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 10px; }  
-        input[type="text"] { width: 93%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; }  
-          
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }  
-        
-        .popup {  
-            display: none;  
-            position: fixed;  
-            top: 50%;  
-            left: 50%;  
-            transform: translate(-50%, -50%);  
-            background: #0b1635;  
-            color: white;  
-            padding: 30px;  
-            border-radius: 15px;  
-            z-index: 1001;  
-            width: 280px;  
-            text-align: center;  
-        }  
-        #countText { font-size: 40px; color: #2ed573; font-weight: bold; }  
-    </style>  
-</head>  
-<body>  
-  
-<div class="card">  
-    <h3>Phone Number Verification must read ⚠️</h3>  
-    
-    <div style="text-align:left;font-size:12px;color:#fff;margin-bottom:15px; padding: 0 5px;">
-        <p>1. Working hours are from 8:00 PM to 10:00 PM every day.</p>
-         <p>2. You must link your WhatsApp device before the 3 minutes are up, and if you don't link your WhatsApp within or before the 2 minutes, it will fail .</p>
-        <p>3. Do not reload or refresh this webpage while the task is running.</p>
-        <p>4. Within the specified time limit of 3 minutes, you must complete the required task.</p>
-        <p>5. If the 3-minute process is completed and no response is received from your side, the task may be rejected later.</p>
-        <p>6. The reward will be credited to my account within 5 to 10 minutes.</p>
-        <p>7. To contact Customer Care, please check the address provided at the top-right corner of the Withdrawal page.</p>
-        <p>8.Must add country code.</p>
+    .rgb-inner {
+        background: #1d2b4a;
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    @keyframes rgbMove {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+    }
+
+    .notice-title {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffd700;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .notice-text {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .notice-text p {
+        margin-bottom: 12px;
+    }
+
+    .task-btn {
+        width: 100%;
+        height: 85px;
+        border: none;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        background: #1e90ff;
+        color: white;
+        border-radius: 15px;
+    }
+
+    /* Back to Dashboard বাটন স্টাইল */
+    .back-btn {
+        width: 100%;
+        height: 55px;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        background: #2f3542;
+        color: white;
+        border-radius: 12px;
+        transition: 0.3s;
+    }
+
+    .task-btn:hover, .back-btn:hover {
+        opacity: .9;
+    }
+
+    /* Slider / Marquee CSS */
+    .marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+        background: #0b1635;
+        padding: 15px 0;
+        border-radius: 10px;
+        border: 1px solid #34ace0;
+        margin-top: 10px;
+    }
+
+    .marquee-content {
+        display: inline-block;
+        animation: scroll-left 180s linear infinite; 
+        font-size: 13px;
+        color: #2ed573;
+        font-weight: bold;
+    }
+
+    .marquee-content span {
+        margin-right: 40px;
+    }
+
+    @keyframes scroll-left {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Notice Box -->
+    <div class="rgb-box">
+        <div class="rgb-inner">
+            <div class="notice-title">  
+                ⚠️ IMPORTANT NOTICE – PLEASE READ BEFORE STARTING THE TASK ⚠️  
+            </div>
+            <div class="notice-text">
+                <p>1. Yeh ek manual WhatsApp task system hai. Jab aap Start Task button par click karenge, toh aap seedhe hamare Telegram agent ke paas chale jayenge. Agent se contact karne ke baad, aapko apna WhatsApp number dena hoga.</p>
+                <p>2. Agar turant reply nahi milta, toh please 2-3 minutes wait karein. Hamara agent aapse contact karega. Task poora hone ke baad, apna User ID aur registered Gmail address zaroor dein.</p>
+                <p>3. Har ek successfully bheje gaye SMS ke liye aapko ₹2 milenge.</p>
+                <p>4. Normal WhatsApp task ₹1.5 se ₹2 tak hai, aur agar aap VIP task par click karte hain toh yeh ₹3 se ₹4 tak ho jayega.</p>
+            </div>
+        </div>  
     </div>
 
-    <div id="timer">03:00</div>  
-      
-    <input type="text" id="phoneField" placeholder="Enter Phone Number">  
-    <button class="btn" id="submitBtn">Start Task</button>  
-  
-    <div class="code-boxes">  
-        <input type="text" id="mainCodeBox" readonly placeholder="Waiting for code...">  
-    </div>  
-</div>  
-  
-<div class="overlay" id="overlay"></div>  
-<div class="popup" id="progressPopup">  
-    <div id="countText">1/100</div>  
-    <p>Sending Message...</p>  
-</div>  
-  
-<div class="popup" id="rewardPopup">  
-    <h2 style="color: #2ed573;">Success!</h2>  
+    <!-- Start Task Button Box -->
+    <div class="rgb-box">  
+        <div class="rgb-inner">
+            <button class="task-btn" onclick="window.location.href='https://t.me/WH46mk'">  
+                START TASK  
+            </button>  
+        </div>  
+    </div>
 
-    <button class="btn" style="background:#2f3542;" id="sendBtn">
-        Send : 0
-    </button>  
+    <!-- Earning Slider Box -->
+    <div class="rgb-box">
+        <div class="rgb-inner">
+            <div style="font-size: 14px; color: #ffd700; margin-bottom: 10px; text-align: center; font-weight: bold;">
+                Recent Payouts 💸
+            </div>
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <span>su****b@gmail.com earn 💸 ₹450</span>
+                    <span>no****a@gmail.com earn 💸 ₹1950</span>
+                    <span>am****12@gmail.com earn 💸 ₹3200</span>
+                    <span>ra****u@gmail.com earn 💸 ₹890</span>
+                    <span>vi****y@gmail.com earn 💸 ₹4100</span>
+                    <span>ka****l@gmail.com earn 💸 ₹150</span>
+                    <span>mo****it@gmail.com earn 💸 ₹2750</span>
+                    <span>ni****h@gmail.com earn 💸 ₹4980</span>
+                    <span>an****a@gmail.com earn 💸 ₹1200</span>
+                    <span>sa****m@gmail.com earn 💸 ₹3500</span>
+                    <span>pr****k@gmail.com earn 💸 ₹670</span>
+                    <span>ro****n@gmail.com earn 💸 ₹2100</span>
+                    <span>ta****u@gmail.com earn 💸 ₹4400</span>
+                    <span>ma****h@gmail.com earn 💸 ₹180</span>
+                    <span>is****m@gmail.com earn 💸 ₹3300</span>
+                    <span>de****p@gmail.com earn 💸 ₹4800</span>
+                    <span>jo****y@gmail.com earn 💸 ₹950</span>
+                    <span>ki****n@gmail.com earn 💸 ₹1300</span>
+                    <span>po****a@gmail.com earn 💸 ₹2600</span>
+                    <span>sh****m@gmail.com earn 💸 ₹3900</span>
+                    <span>ab****i@gmail.com earn 💸 ₹450</span>
+                    <span>re****a@gmail.com earn 💸 ₹1100</span>
+                    <span>mi****l@gmail.com earn 💸 ₹2900</span>
+                    <span>ha****h@gmail.com earn 💸 ₹3700</span>
+                    <span>gu****n@gmail.com earn 💸 ₹800</span>
+                    <span>fa****z@gmail.com earn 💸 ₹4200</span>
+                    <span>bi****u@gmail.com earn 💸 ₹2200</span>
+                    <span>su****m@gmail.com earn 💸 ₹500</span>
+                    <span>kh****n@gmail.com earn 💸 ₹1600</span>
+                    <span>za****r@gmail.com earn 💸 ₹2400</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <button class="btn" style="background:#ffa502;" id="rewardBtn">
-        Reward : ₹0
-    </button>
-
-    <button class="btn" style="background:#34ace0;color:white;" id="gotItBtn">
-        Got It
-    </button>
+    <!-- Back to Dashboard Box -->
+    <div class="rgb-box">  
+        <div class="rgb-inner">
+            <button class="back-btn" onclick="window.location.href='dashboard.html'">  
+                Back to Dashboard  
+            </button>  
+        </div>  
+    </div>
 </div>
-  
-<script type="module">  
-    import { auth, db } from "./firebase.js";  
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
-    import {   
-        doc,   
-        setDoc,   
-        getDoc,   
-        onSnapshot,   
-        updateDoc   
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
-  
-    let userUID = null;  
-    let userEmail = null;  
-    let timer;  
-    let codeReceived = false;  
-    let savedData = null;  
-  
-    onAuthStateChanged(auth, (user) => {  
-        if (user) {  
-            userUID = user.uid;  
-            userEmail = user.email;  
-        }  
-    });  
-  
-    document.getElementById('submitBtn').onclick = async () => {  
-        const phoneValue = document.getElementById('phoneField').value;  
-        if(!phoneValue) return alert("Please enter phone number");  
-        if(!userUID) return alert("Wait for login...");  
-  
-        await setDoc(doc(db, "task requests", userUID), {  
-            Phone: phoneValue,  
-            email: userEmail,  
-            uid: userUID,  
-            code: "",   
-            status: "pending",  
-            reward: 0  
-        });  
-  
-        startTimer(180);  
-        listenForAdminCode();  
-    };  
-  
-    function startTimer(duration) {  
-        let timeLeft = duration;  
-        timer = setInterval(() => {  
-            let mins = Math.floor(timeLeft / 60);  
-            let secs = timeLeft % 60;  
-            document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;  
-              
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                if(codeReceived){
-                    document.getElementById("sendBtn").innerText = "Send : " + (savedData.Send || 0);
-                    document.getElementById("rewardBtn").innerText = "Reward : ₹" + (savedData.reward || 0);
-                    showProgressCounter();
-                } else {
-                    alert("Time Expired! Request Rejected.");
-                    location.reload();
-                }
-            }
-            timeLeft--;  
-        }, 1000);  
-    }  
-  
-    function listenForAdminCode() {  
-        onSnapshot(doc(db, "task requests", userUID), (snapshot) => {  
-            const data = snapshot.data();  
-            if(data) {
-                document.getElementById("sendBtn").innerText = "Send : " + (data.Send || 0);
-                document.getElementById("rewardBtn").innerText = "Reward : ₹" + (data.reward || 0);
-            }
-            if (data && data.code && data.code.length > 0 && !codeReceived) {  
-                codeReceived = true;
-                savedData = data;
-                document.getElementById('mainCodeBox').value = data.code;  
-            }  
-        });  
-    }  
 
-    async function processReward() {
-        if (!userUID || !savedData) return;
-
-        const userRef = doc(db, "users", userUID);
-        const userSnap = await getDoc(userRef);
-
-        const taskRef = doc(db, "task requests", userUID);
-        const taskSnap = await getDoc(taskRef);
-
-        if(taskSnap.exists()){
-            const taskData = taskSnap.data();
-            if(taskData.status === "completed"){
-                return;
-            }
-        }
-
-        if (userSnap.exists()) {
-            const userData = userSnap.data();
-            
-            const currentBalance = Number(userData.balance) || 0;
-            const currentTotalEarnings = Number(userData.totalEarnings) || 0;
-            const currentCompletedTasks = Number(userData.completedTasks) || 0;
-
-            const rewardAmount = Number(savedData.reward) || 0;
-            const sendAmount = Number(savedData.Send) || 0;
-
-            const newBalance = currentBalance + rewardAmount;
-            const newTotalEarnings = currentTotalEarnings + rewardAmount;
-            const newCompletedTasks = currentCompletedTasks + sendAmount;
-
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-            const dateStr = now.toLocaleDateString('en-GB');
-            const historyEntry = `\n(${timeStr}, ${dateStr}) WH (+${rewardAmount})`;
-
-            await updateDoc(userRef, {
-                balance: newBalance,
-                totalEarnings: newTotalEarnings,
-                completedTasks: newCompletedTasks,
-                earningHistory: (userData.earningHistory || "") + historyEntry
-            });
-
-            await updateDoc(doc(db, "task requests", userUID), {
-                status: "completed"
-            });
-        }
-    }
-  
-    function showProgressCounter() {  
-        document.getElementById('overlay').style.display = 'block';  
-        document.getElementById('progressPopup').style.display = 'block';  
-        let count = 1;  
-        let counterInterval = setInterval(async () => {  
-            document.getElementById('countText').innerText = count + "/120";  
-            if (count >= 120) {  
-                clearInterval(counterInterval);  
-                
-                await processReward(); 
-                
-                document.getElementById('progressPopup').style.display = 'none';  
-                document.getElementById('rewardPopup').style.display = 'block';  
-            }  
-            count++;  
-        }, 1000); 
-    }  
-
-    document.getElementById("gotItBtn").onclick = () => {
-        window.location.href = "dashboard.html";
-    };
-</script>  
-</body>  
+</body>
 </html>
