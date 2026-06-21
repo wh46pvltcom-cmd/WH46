@@ -1,1 +1,170 @@
 
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WH46 Register</title><style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+width:100%;
+max-width:420px;
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 25px rgba(37,99,235,.3);
+}
+
+.logo{
+text-align:center;
+font-size:32px;
+font-weight:bold;
+color:#60a5fa;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#cbd5e1;
+margin-bottom:25px;
+}
+
+.input-box{
+margin-bottom:15px;
+}
+
+.input-box input{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:10px;
+background:#334155;
+color:white;
+font-size:16px;
+}
+
+.input-box input::placeholder{
+color:#cbd5e1;
+}
+
+.btn{
+width:100%;
+padding:14px;
+background:#2563eb;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn:hover{
+background:#1d4ed8;
+}
+
+.login-link{
+text-align:center;
+margin-top:20px;
+}
+
+.login-link a{
+color:#60a5fa;
+text-decoration:none;
+}
+</style></head><body><div class="container"><div class="logo">WH46</div><div class="subtitle">
+Create your account
+</div><form id="registerForm"><div class="input-box">
+<input id="fullName" type="text" placeholder="Full Name" required>
+</div><div class="input-box">
+<input id="email" type="email" placeholder="Email Address" required>
+</div><div class="input-box">
+<input id="phone" type="text" placeholder="WhatsApp Number" required>
+</div><div class="input-box">
+<input id="inviteCode" type="text" placeholder="Invitation Code" required>
+</div><div class="input-box">
+<input id="password" type="password" placeholder="Password" required>
+</div><button type="submit" class="btn">
+Register
+</button></form><div class="login-link">
+Already have an account?
+<a href="login.html">Login</a>
+</div></div><script type="module">
+
+import { auth, db } from "./firebase.js";
+
+import {
+createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+doc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const registerForm = document.getElementById("registerForm");
+
+registerForm.addEventListener("submit", async (e) => {
+
+e.preventDefault();
+
+const fullName = document.getElementById("fullName").value;
+const email = document.getElementById("email").value;
+const phone = document.getElementById("phone").value;
+const inviteCode = document.getElementById("inviteCode").value;
+const password = document.getElementById("password").value;
+
+try {
+
+const userCredential =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+const user = userCredential.user;
+
+await setDoc(doc(db, "users", user.uid), {
+
+fullName: fullName,
+email: email,
+phone: phone,
+inviteCode: inviteCode,
+
+balance: 0,
+completedTasks: 0,
+
+createdAt: Date.now()
+
+});
+
+alert("Registration Successful!");
+
+window.location.href = "login.html";
+
+} catch (error) {
+
+alert(error.message);
+
+}
+
+});
+
+</script></body>
+</html>
