@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>  
 <html lang="en">          
 <head>          
@@ -145,6 +144,37 @@ font-weight:bold;
 display:none;
 }
 
+/* SLIDER / MARQUEE CSS */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    background: #111827;
+    padding: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #2563eb;
+    margin-top: 15px;
+}
+
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%;
+    /* ৪০টি আইটেমের জন্য ১৬০ সেকেন্ড সময় দেওয়া হয়েছে (আইটেম প্রতি ৪ সেকেন্ড) */
+    animation: scroll-left 160s linear infinite; 
+    font-size: 12px;
+    color: #2ed573;
+    font-weight: bold;
+}
+
+.marquee-content span {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
 /* ADD OPTIONS */
 #addOptions{
 margin-top:10px;
@@ -163,11 +193,105 @@ display:none;
 <button class="task-withdraw">Withdraw</button>        
 <img src="Generated Image June 07, 2026 - 6_41PM.png" class="task-banner">      
 </div>      
+
+<!-- স্লাইডার ১: ৪০টি জিমেইল আইডি -->
+<div class="marquee-container">
+    <div class="marquee-content">
+        <span>su****b@gmail.com earn 💸 ₹450</span>
+        <span>no****a@gmail.com earn 💸 ₹1950</span>
+        <span>am****12@gmail.com earn 💸 ₹3200</span>
+        <span>ra****u@gmail.com earn 💸 ₹890</span>
+        <span>vi****y@gmail.com earn 💸 ₹4100</span>
+        <span>ka****l@gmail.com earn 💸 ₹150</span>
+        <span>mo****it@gmail.com earn 💸 ₹2750</span>
+        <span>ni****h@gmail.com earn 💸 ₹4980</span>
+        <span>an****a@gmail.com earn 💸 ₹1200</span>
+        <span>sa****m@gmail.com earn 💸 ₹3500</span>
+        <span>pr****k@gmail.com earn 💸 ₹670</span>
+        <span>ro****n@gmail.com earn 💸 ₹2100</span>
+        <span>ta****u@gmail.com earn 💸 ₹4400</span>
+        <span>ma****h@gmail.com earn 💸 ₹180</span>
+        <span>is****m@gmail.com earn 💸 ₹3300</span>
+        <span>de****p@gmail.com earn 💸 ₹4800</span>
+        <span>jo****y@gmail.com earn 💸 ₹950</span>
+        <span>ki****n@gmail.com earn 💸 ₹1300</span>
+        <span>po****a@gmail.com earn 💸 ₹2600</span>
+        <span>sh****m@gmail.com earn 💸 ₹3900</span>
+        <span>ab****i@gmail.com earn 💸 ₹450</span>
+        <span>re****a@gmail.com earn 💸 ₹1100</span>
+        <span>mi****l@gmail.com earn 💸 ₹2900</span>
+        <span>ha****h@gmail.com earn 💸 ₹3700</span>
+        <span>gu****n@gmail.com earn 💸 ₹800</span>
+        <span>fa****z@gmail.com earn 💸 ₹4200</span>
+        <span>bi****u@gmail.com earn 💸 ₹2200</span>
+        <span>su****m@gmail.com earn 💸 ₹500</span>
+        <span>kh****n@gmail.com earn 💸 ₹1600</span>
+        <span>za****r@gmail.com earn 💸 ₹2400</span>
+        <span>lo****p@gmail.com earn 💸 ₹3100</span>
+        <span>me****h@gmail.com earn 💸 ₹4500</span>
+        <span>tu****n@gmail.com earn 💸 ₹720</span>
+        <span>ye****a@gmail.com earn 💸 ₹1850</span>
+        <span>wa****d@gmail.com earn 💸 ₹2950</span>
+        <span>ve****r@gmail.com earn 💸 ₹4300</span>
+        <span>ne****o@gmail.com earn 💸 ₹550</span>
+        <span>cy****x@gmail.com earn 💸 ₹1250</span>
+        <span>da****v@gmail.com earn 💸 ₹3800</span>
+        <span>pa****l@gmail.com earn 💸 ₹4900</span>
+    </div>
+</div>
+
 <div class="task-card">          
 <h3>📱 WhatsApp Task</h3>          
 <p>Reward ₹2000</p>          
 <button class="start-btn" onclick="window.location.href='task.html'">Start Task</button>          
 </div>      
+
+<!-- স্লাইডার ২: ৪০টি জিমেইল আইডি (সেম স্পিড ও ডেটা) -->
+<div class="marquee-container">
+    <div class="marquee-content">
+        <span>su****b@gmail.com earn 💸 ₹450</span>
+        <span>no****a@gmail.com earn 💸 ₹1950</span>
+        <span>am****12@gmail.com earn 💸 ₹3200</span>
+        <span>ra****u@gmail.com earn 💸 ₹890</span>
+        <span>vi****y@gmail.com earn 💸 ₹4100</span>
+        <span>ka****l@gmail.com earn 💸 ₹150</span>
+        <span>mo****it@gmail.com earn 💸 ₹2750</span>
+        <span>ni****h@gmail.com earn 💸 ₹4980</span>
+        <span>an****a@gmail.com earn 💸 ₹1200</span>
+        <span>sa****m@gmail.com earn 💸 ₹3500</span>
+        <span>pr****k@gmail.com earn 💸 ₹670</span>
+        <span>ro****n@gmail.com earn 💸 ₹2100</span>
+        <span>ta****u@gmail.com earn 💸 ₹4400</span>
+        <span>ma****h@gmail.com earn 💸 ₹180</span>
+        <span>is****m@gmail.com earn 💸 ₹3300</span>
+        <span>de****p@gmail.com earn 💸 ₹4800</span>
+        <span>jo****y@gmail.com earn 💸 ₹950</span>
+        <span>ki****n@gmail.com earn 💸 ₹1300</span>
+        <span>po****a@gmail.com earn 💸 ₹2600</span>
+        <span>sh****m@gmail.com earn 💸 ₹3900</span>
+        <span>ab****i@gmail.com earn 💸 ₹450</span>
+        <span>re****a@gmail.com earn 💸 ₹1100</span>
+        <span>mi****l@gmail.com earn 💸 ₹2900</span>
+        <span>ha****h@gmail.com earn 💸 ₹3700</span>
+        <span>gu****n@gmail.com earn 💸 ₹800</span>
+        <span>fa****z@gmail.com earn 💸 ₹4200</span>
+        <span>bi****u@gmail.com earn 💸 ₹2200</span>
+        <span>su****m@gmail.com earn 💸 ₹500</span>
+        <span>kh****n@gmail.com earn 💸 ₹1600</span>
+        <span>za****r@gmail.com earn 💸 ₹2400</span>
+        <span>lo****p@gmail.com earn 💸 ₹3100</span>
+        <span>me****h@gmail.com earn 💸 ₹4500</span>
+        <span>tu****n@gmail.com earn 💸 ₹720</span>
+        <span>ye****a@gmail.com earn 💸 ₹1850</span>
+        <span>wa****d@gmail.com earn 💸 ₹2950</span>
+        <span>ve****r@gmail.com earn 💸 ₹4300</span>
+        <span>ne****o@gmail.com earn 💸 ₹550</span>
+        <span>cy****x@gmail.com earn 💸 ₹1250</span>
+        <span>da****v@gmail.com earn 💸 ₹3800</span>
+        <span>pa****l@gmail.com earn 💸 ₹4900</span>
+    </div>
+</div>
+
 <div class="task-card">          
 <h3>⭐ VIP WhatsApp Task</h3>          
 <p>Reward ₹8000</p>          
@@ -196,7 +320,7 @@ display:none;
 <h3>Invitation Code</h3>          
 <p class="ref-code">WH45-REF-7891</p>          
 </div>      
-<div class="earn-card">          
+<div class="invite-card">          
 <p>You will earn ₹50 Referral Bonus when your friend completes first withdrawal.</p>          
 </div>        
 </div>      
@@ -234,7 +358,6 @@ display:none;
 <button id="profileBtn">Profile</button>      
 </div>      
 
-<!-- Navigation Script -->
 <script>          
 const tabs = {          
 taskTab: document.getElementById("taskTab"),          
@@ -294,46 +417,23 @@ addOptions.classList.add("hidden");
 });
 </script>      
 
-<!-- Firebase Auth and Firestore Script -->
 <script type="module">  
 import { auth, db } from "./firebase.js";  
-  
-import {  
-onAuthStateChanged,  
-signOut  
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
-  
-// ১. Import Section-এ পরিবর্তন করা হয়েছে
-import {  
-doc,  
-getDoc,
-setDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
   
 onAuthStateChanged(auth, async (user) => {  
-  
 if(user){  
-  
-document.getElementById("userEmail").textContent =  
-user.email || "No Email";  
-  
-document.getElementById("userId").textContent =  
-user.uid;  
-  
-const userName =  
-user.email.split("@")[0];  
-  
-document.getElementById("userName").textContent =  
-userName;  
+document.getElementById("userEmail").textContent = user.email || "No Email";  
+document.getElementById("userId").textContent = user.uid;  
+const userName = user.email.split("@")[0];  
+document.getElementById("userName").textContent = userName;  
   
 try{  
-  
-// ২. ডেটা চেক এবং সেট করার লজিকে পরিবর্তন করা হয়েছে
 const userRef = doc(db,"users",user.uid);
 const userSnap = await getDoc(userRef);
 
 if(!userSnap.exists()){
-
 await setDoc(userRef,{
 balance:50,
 completedTasks:0,
@@ -341,51 +441,29 @@ totalEarnings:50,
 totalWithdrawal:0,
 earningHistory:"Signup Bonus🎁 +₹50"
 });
-
 }
 
 const updatedSnap = await getDoc(userRef);
 const data = updatedSnap.data();
 
-document.getElementById("userBalance").textContent =
-"₹" + (data.balance || 0);
-  
-document.getElementById("completedTasks").textContent =  
-data.completedTasks || 0;  
-  
-document.getElementById("totalEarnings").textContent =  
-"₹" + (data.totalEarnings || 0);  
-  
-document.getElementById("totalWithdrawal").textContent =  
-"₹" + (data.totalWithdrawal || 0);  
-  
-document.getElementById("earningHistory").textContent =  
-data.earningHistory || "No history yet.";  
-  
+document.getElementById("userBalance").textContent = "₹" + (data.balance || 0);
+document.getElementById("completedTasks").textContent = data.completedTasks || 0;  
+document.getElementById("totalEarnings").textContent = "₹" + (data.totalEarnings || 0);  
+document.getElementById("totalWithdrawal").textContent = "₹" + (data.totalWithdrawal || 0);  
+document.getElementById("earningHistory").textContent = data.earningHistory || "No history yet.";  
 }catch(error){  
 console.log(error);  
 }  
-  
 }  
-  
 });  
   
-document.querySelector(".logout")  
-.addEventListener("click", async ()=>{  
-  
+document.querySelector(".logout").addEventListener("click", async ()=>{  
 try{  
-  
 await signOut(auth);  
-  
-window.location.href =  
-"login.html";  
-  
+window.location.href = "login.html";  
 }catch(error){  
-  
 alert(error.message);  
-  
 }  
-  
 });  
 </script>    
 
