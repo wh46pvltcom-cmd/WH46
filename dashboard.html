@@ -1,1 +1,393 @@
 
+<!DOCTYPE html>  
+<html lang="en">          
+<head>          
+<meta charset="UTF-8">          
+<meta name="viewport" content="width=device-width, initial-scale=1.0">          
+<title>Dashboard</title>        
+<style>        
+*{  
+margin:0;  
+padding:0;  
+box-sizing:border-box;  
+font-family:Arial,sans-serif;  
+}  
+body{
+background:#0f172a;
+color:white;
+padding-bottom:80px;
+}
+
+/* TASK BANNER */
+.task-banner{
+width:100%;
+border-radius:15px;
+display:block;
+}
+
+/* CARDS */
+.task-card,.earn-card,.profile-card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-top:15px;
+line-height:1.6;
+}
+
+/* BUTTON */
+.start-btn{
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* TASK WITHDRAW */
+.task-withdraw{
+position:absolute;
+top:10px;
+right:10px;
+background:#2563eb;
+border:none;
+color:white;
+padding:5px 8px;
+font-size:11px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.balance-box{
+margin:20px;
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+text-align:center;
+position:relative;
+}
+
+.balance-box h2{
+color:#22c55e;
+font-size:32px;
+}
+
+/* PROFILE WITHDRAW */
+.withdraw-btn{
+position:absolute;
+top:15px;
+right:15px;
+background:#2563eb;
+border:none;
+color:white;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+}
+
+/* SMALL BOX */
+.small-box{
+margin-top:10px;
+background:#111827;
+padding:12px;
+border-radius:10px;
+text-align:center;
+cursor:pointer;
+}
+
+.logout{
+background:red;
+color:white;
+}
+
+/* INVITE */
+.invite-title{
+text-align:center;
+font-size:32px;
+color:#60a5fa;
+margin:20px 0;
+}
+
+.ref-code{
+font-size:20px;
+color:#22c55e;
+font-weight:bold;
+}
+
+/* NAV */
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#111827;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+border-top:2px solid #2563eb;
+}
+
+.bottom-nav button{
+background:none;
+border:none;
+color:white;
+font-size:14px;
+cursor:pointer;
+}
+
+.active{
+color:#60a5fa;
+font-weight:bold;
+}
+
+.hidden{
+display:none;
+}
+
+/* ADD OPTIONS */
+#addOptions{
+margin-top:10px;
+}
+
+#addOptions.hidden{
+display:none;
+}
+</style>        
+</head>        
+<body>      
+
+<!-- TASK TAB -->      
+<div id="taskTab">        
+<div style="position:relative;">          
+<button class="task-withdraw">Withdraw</button>        
+<img src="Generated Image June 07, 2026 - 6_41PM.png" class="task-banner">      
+</div>      
+<div class="task-card">          
+<h3>📱 WhatsApp Task</h3>          
+<p>Reward ₹2000</p>          
+<button class="start-btn" onclick="window.location.href='task.html'">Start Task</button>          
+</div>      
+<div class="task-card">          
+<h3>⭐ VIP WhatsApp Task</h3>          
+<p>Reward ₹8000</p>          
+<button class="start-btn" onclick="window.location.href='task.html'">Start Task</button>          
+</div>        
+</div>      
+
+<!-- EARNINGS TAB -->      
+<div id="earningsTab" class="hidden">          
+<div class="earn-card">        
+<h3>Total Earnings</h3>          
+<p id="totalEarnings">₹0</p>        
+<br>        
+<h3>Total Withdrawal</h3>          
+<p id="totalWithdrawal">₹0</p>        
+<br>        
+<h3>Earning History</h3>          
+<p id="earningHistory">No history yet.</p>        
+</div>          
+</div>      
+
+<!-- INVITE TAB -->      
+<div id="inviteTab" class="hidden">        
+<div class="invite-title">🎁 INVITE & EARN</div>        
+<div class="earn-card">          
+<h3>Invitation Code</h3>          
+<p class="ref-code">WH45-REF-7891</p>          
+</div>      
+<div class="earn-card">          
+<p>You will earn ₹50 Referral Bonus when your friend completes first withdrawal.</p>          
+</div>        
+</div>      
+
+<!-- PROFILE TAB -->      
+<div id="profileTab" class="hidden">        
+<div class="balance-box">          
+<button class="withdraw-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>      
+<p>Current Balance</p>          
+<h2 id="userBalance">₹0</h2>          
+</div>      
+<div class="profile-card">    
+<p><strong>User Name:</strong> <span id="userName">Loading...</span></p>    
+<p><strong>Gmail:</strong> <span id="userEmail">Loading...</span></p>    
+<p><strong>User ID:</strong> <span id="userId">Loading...</span></p>    
+<p><strong>Completed Tasks:</strong>
+<span id="completedTasks">0</span>
+</p>    
+</div>      
+<div class="small-box" id="addCardBtn">➕ Add Card</div>        
+
+<div id="addOptions" class="hidden">          
+<div class="small-box" onclick="window.location.href='payment.html'">🏦 Add Bank Account</div>          
+<div class="small-box" onclick="window.location.href='payment.html'">💳 Add UPI ID</div>          
+</div>      
+
+<div class="small-box logout">Logout</div>        
+</div>      
+
+<!-- NAV -->      
+<div class="bottom-nav">        
+<button id="taskBtn" class="active">Task</button>      
+<button id="earnBtn">Earnings</button>      
+<button id="inviteBtn">Invite</button>      
+<button id="profileBtn">Profile</button>      
+</div>      
+
+<!-- Navigation Script -->
+<script>          
+const tabs = {          
+taskTab: document.getElementById("taskTab"),          
+earningsTab: document.getElementById("earningsTab"),          
+inviteTab: document.getElementById("inviteTab"),          
+profileTab: document.getElementById("profileTab")          
+};          
+
+const btns = {
+taskBtn: document.getElementById("taskBtn"),
+earnBtn: document.getElementById("earnBtn"),
+inviteBtn: document.getElementById("inviteBtn"),
+profileBtn: document.getElementById("profileBtn")
+};
+
+function hideAll(){
+Object.values(tabs).forEach(t => t.classList.add("hidden"));
+Object.values(btns).forEach(b => b.classList.remove("active"));
+}
+
+btns.taskBtn.onclick = () => {
+hideAll();
+tabs.taskTab.classList.remove("hidden");
+btns.taskBtn.classList.add("active");
+};
+
+btns.earnBtn.onclick = () => {
+hideAll();
+tabs.earningsTab.classList.remove("hidden");
+btns.earnBtn.classList.add("active");
+};
+
+btns.inviteBtn.onclick = () => {
+hideAll();
+tabs.inviteTab.classList.remove("hidden");
+btns.inviteBtn.classList.add("active");
+};
+
+btns.profileBtn.onclick = () => {
+hideAll();
+tabs.profileTab.classList.remove("hidden");
+btns.profileBtn.classList.add("active");
+};
+
+const addCardBtn = document.getElementById("addCardBtn");
+const addOptions = document.getElementById("addOptions");
+
+addCardBtn.onclick = (event) => {
+event.stopPropagation();
+addOptions.classList.toggle("hidden");
+};
+
+document.addEventListener("click", function(event){
+if (!addCardBtn.contains(event.target) && !addOptions.contains(event.target)) {
+addOptions.classList.add("hidden");
+}
+});
+</script>      
+
+<!-- Firebase Auth and Firestore Script -->
+<script type="module">  
+import { auth, db } from "./firebase.js";  
+  
+import {  
+onAuthStateChanged,  
+signOut  
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
+  
+// ১. Import Section-এ পরিবর্তন করা হয়েছে
+import {  
+doc,  
+getDoc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
+  
+onAuthStateChanged(auth, async (user) => {  
+  
+if(user){  
+  
+document.getElementById("userEmail").textContent =  
+user.email || "No Email";  
+  
+document.getElementById("userId").textContent =  
+user.uid;  
+  
+const userName =  
+user.email.split("@")[0];  
+  
+document.getElementById("userName").textContent =  
+userName;  
+  
+try{  
+  
+// ২. ডেটা চেক এবং সেট করার লজিকে পরিবর্তন করা হয়েছে
+const userRef = doc(db,"users",user.uid);
+const userSnap = await getDoc(userRef);
+
+if(!userSnap.exists()){
+
+await setDoc(userRef,{
+balance:50,
+completedTasks:0,
+totalEarnings:50,
+totalWithdrawal:0,
+earningHistory:"Signup Bonus🎁 +₹50"
+});
+
+}
+
+const updatedSnap = await getDoc(userRef);
+const data = updatedSnap.data();
+
+document.getElementById("userBalance").textContent =
+"₹" + (data.balance || 0);
+  
+document.getElementById("completedTasks").textContent =  
+data.completedTasks || 0;  
+  
+document.getElementById("totalEarnings").textContent =  
+"₹" + (data.totalEarnings || 0);  
+  
+document.getElementById("totalWithdrawal").textContent =  
+"₹" + (data.totalWithdrawal || 0);  
+  
+document.getElementById("earningHistory").textContent =  
+data.earningHistory || "No history yet.";  
+  
+}catch(error){  
+console.log(error);  
+}  
+  
+}  
+  
+});  
+  
+document.querySelector(".logout")  
+.addEventListener("click", async ()=>{  
+  
+try{  
+  
+await signOut(auth);  
+  
+window.location.href =  
+"login.html";  
+  
+}catch(error){  
+  
+alert(error.message);  
+  
+}  
+  
+});  
+</script>    
+
+</body>
+</html>
