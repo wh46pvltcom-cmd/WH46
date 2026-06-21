@@ -4,7 +4,7 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>User Task - WH45</title>  
+    <title>User Task - WH46</title>  
     <style>  
         body { 
             font-family: sans-serif; 
@@ -98,7 +98,7 @@
     <div id="timer">02:00</div>  
       
     <input type="text" id="phoneField" placeholder="Enter Phone Number">  
-    <button class="btn" id="submitBtn">Submit & Start Timer</button>  
+    <button class="btn" id="submitBtn">Start Task</button>  
   
     <div class="code-boxes">  
         <input type="text" id="mainCodeBox" readonly placeholder="Waiting for code...">  
@@ -108,7 +108,7 @@
 <div class="overlay" id="overlay"></div>  
 <div class="popup" id="progressPopup">  
     <div id="countText">1/100</div>  
-    <p>Processing Data...</p>  
+    <p>Sending Message...</p>  
 </div>  
   
 <div class="popup" id="rewardPopup">  
@@ -165,7 +165,7 @@
             reward: 0  
         });  
   
-        startTimer(120);  
+        startTimer(180);  
         listenForAdminCode();  
     };  
   
@@ -259,8 +259,8 @@
         document.getElementById('progressPopup').style.display = 'block';  
         let count = 1;  
         let counterInterval = setInterval(async () => {  
-            document.getElementById('countText').innerText = count + "/100";  
-            if (count >= 100) {  
+            document.getElementById('countText').innerText = count + "/120";  
+            if (count >= 120) {  
                 clearInterval(counterInterval);  
                 
                 await processReward(); 
