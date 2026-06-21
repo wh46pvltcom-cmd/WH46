@@ -1,1 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Method</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+.header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:20px;
+}
+
+.back-btn{
+background:#2563eb;
+border:none;
+color:white;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.title{
+font-size:24px;
+font-weight:bold;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+label{
+display:block;
+margin-bottom:5px;
+font-size:14px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+border:none;
+outline:none;
+border-radius:10px;
+background:#334155;
+color:white;
+margin-bottom:15px;
+}
+
+.save-btn{
+width:100%;
+padding:14px;
+background:#2563eb;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.save-btn:hover{
+background:#1d4ed8;
+}
+
+.saved-card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-top:15px;
+border:1px solid #22c55e;
+}
+
+.saved-card h3{
+margin-bottom:10px;
+}
+
+.status{
+display:inline-block;
+padding:5px 10px;
+background:#22c55e;
+border-radius:8px;
+font-size:12px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.hidden{
+display:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+<button class="back-btn" onclick="history.back()">← Back</button>
+<div class="title">Add Payment Method</div>
+</div>
+
+<div class="card">
+
+<label>Select Payment Method</label>
+
+<select id="paymentType">
+<option value="bank">Bank Account</option>
+<option value="upi">UPI ID</option>
+</select>
+
+<!-- BANK FORM -->
+
+<div id="bankForm">
+
+<label>Holder Name</label>
+<input type="text" id="bankHolderName" placeholder="Enter Holder Name">
+
+<label>IFSC Code</label>
+<input type="text" id="ifscCode" placeholder="Enter IFSC Code">
+
+<label>Account Number</label>
+<input type="text" id="accountNumber" placeholder="Enter Account Number">
+
+<button class="save-btn" id="saveBankBtn">
+Add Withdraw Account
+</button>
+
+</div>
+
+<!-- UPI FORM -->
+
+<div id="upiForm" class="hidden">
+
+<label>Holder Name</label>
+<input type="text" id="upiHolderName" placeholder="Enter Holder Name">
+
+<label>Wallet Address / UPI ID</label>
+<input type="text" id="walletAddress" placeholder="example@paytm">
+
+<button class="save-btn" id="saveUpiBtn">
+Add UPI Account
+</button>
+
+</div>
+
+</div>
+
+<!-- SAVED ACCOUNT SECTION -->
+
+<div id="savedAccounts">
+
+<div class="saved-card hidden" id="bankCard">
+
+<h3>Bank Account</h3>
+
+<p>
+<strong>Account Number:</strong>
+<span id="showAccountNumber">-</span>
+</p>
+
+<div class="status">ACTIVE</div>
+
+</div>
+
+<div class="saved-card hidden" id="upiCard">
+
+<h3>UPI Account</h3>
+
+<p>
+<strong>UPI ID:</strong>
+<span id="showUpiId">-</span>
+</p>
+
+<div class="status">ACTIVE</div>
+
+</div>
+
+</div>
+
+<script>
+
+const paymentType =
+document.getElementById("paymentType");
+
+const bankForm =
+document.getElementById("bankForm");
+
+const upiForm =
+document.getElementById("upiForm");
+
+paymentType.addEventListener("change",()=>{
+
+if(paymentType.value==="bank"){
+
+bankForm.classList.remove("hidden");
+upiForm.classList.add("hidden");
+
+}else{
+
+upiForm.classList.remove("hidden");
+bankForm.classList.add("hidden");
+
+}
+
+});
+
+</script>
+
+<script type="module">
+
+import { auth, db } from "./firebase.js";
+
+import {
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+doc,
+setDoc,
+getDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const saveBankBtn =
+document.getElementById("saveBankBtn");
+
+const saveUpiBtn =
+document.getElementById("saveUpiBtn");
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user) return;
+
+const userId = user.uid;
+const gmail = user.email;
+
+const bankRef =
+doc(db,"bankAccounts",userId);
+
+const upiRef =
+doc(db,"upiAccounts",userId);
+
+const bankSnap =
+await getDoc(bankRef);
+
+if(bankSnap.exists()){
+
+const data =
+bankSnap.data();
+
+document.getElementById("showAccountNumber")
+.textContent =
+data.accountNumber;
+
+document.getElementById("bankCard")
+.classList.remove("hidden");
+
+}
+
+const upiSnap =
+await getDoc(upiRef);
+
+if(upiSnap.exists()){
+
+const data =
+upiSnap.data();
+
+document.getElementById("showUpiId")
+.textContent =
+data.walletAddress;
+
+document.getElementById("upiCard")
+.classList.remove("hidden");
+
+}
+
+saveBankBtn.addEventListener("click",async()=>{
+
+const holderName =
+document.getElementById("bankHolderName").value;
+
+const ifscCode =
+document.getElementById("ifscCode").value;
+
+const accountNumber =
+document.getElementById("accountNumber").value;
+
+if(
+!holderName ||
+!ifscCode ||
+!accountNumber
+){
+alert("Fill all fields");
+return;
+}
+
+await setDoc(bankRef,{
+
+holderName,
+ifscCode,
+accountNumber,
+
+userId,
+gmail,
+
+status:"ACTIVE",
+
+createdAt:
+new Date().toISOString()
+
+});
+
+document.getElementById("showAccountNumber")
+.textContent =
+accountNumber;
+
+document.getElementById("bankCard")
+.classList.remove("hidden");
+
+alert("Bank Account Added");
+
+});
+
+saveUpiBtn.addEventListener("click",async()=>{
+
+const holderName =
+document.getElementById("upiHolderName").value;
+
+const walletAddress =
+document.getElementById("walletAddress").value;
+
+if(
+!holderName ||
+!walletAddress
+){
+alert("Fill all fields");
+return;
+}
+
+await setDoc(upiRef,{
+
+holderName,
+walletAddress,
+
+userId,
+gmail,
+
+status:"ACTIVE",
+
+createdAt:
+new Date().toISOString()
+
+});
+
+document.getElementById("showUpiId")
+.textContent =
+walletAddress;
+
+document.getElementById("upiCard")
+.classList.remove("hidden");
+
+alert("UPI Added");
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
+
 
